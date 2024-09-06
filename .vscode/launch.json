@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "postgresqljdbc",
+            "request": "launch",
+            "mainClass": "postgresqljdbc",
+            "projectName": "JavaProject_24392ff2"
+        },
+        {
+            "type": "java",
+            "name": "postgresqljdbc",
+            "request": "launch",
+            "mainClass": "conexao.postgresqljdbc",
+            "projectName": "JavaProject_24392ff2"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "PostgreSQLJDBC",
+            "request": "launch",
+            "mainClass": "PostgreSQLJDBC",
+            "vmArgs": "-cp /home/ryan/Projetos/JavaProject/postgresql-42.7.3.jar:/home/ryan/Projetos/JavaProject/bin",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
