@@ -7,21 +7,24 @@ import org.acme.entity.Tasks;
 import org.acme.entity.Usuario;
 import org.acme.repository.TasksRepository;
 import org.acme.repository.UserRepository;
+import org.acme.response.TasksResponse;
 import org.acme.service.TasksService;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("usuario/{usuarioId}/tasks")
+@Path("usuarios/{usuarioId}/tasks")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class TasksResource {
@@ -60,5 +63,17 @@ public class TasksResource {
         tasks.setId_usuario(usuario);
         repository.persist(tasks);
         return Response.status(Response.Status.CREATED).entity(tasks).build();
+    }
+    @GET
+    public Response listTasks(@PathParam("usuarioId") long userId){
+        Usuario user = userRepository.findById(userId);
+        if (user==null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+    
+          }
+        PanacheQuery<Tasks> query= repository.findAll();
+        List<Tasks> tasks=query.list();
+        var tasksResponseList=tasks.stream().map(task -> TasksResponse.fromEntity(task)).toList();
+        return Response.ok(tasksResponseList).build();
     }
 }

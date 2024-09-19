@@ -1,21 +1,11 @@
-package org.acme.service;
-import jakarta.validation.constraints.NotBlank;
+package org.acme.response;
 
-public class UserService {
-    @NotBlank
+import org.acme.entity.Usuario;
+
+public class UsuarioResponse {
     private String email;
-    @NotBlank
     private String password;
-    @NotBlank
     private String username;
-    public UserService() {
-    }
-    public UserService(@NotBlank String email, @NotBlank String password,
-            @NotBlank String username) {
-        this.email = email;
-        this.password = password;
-        this.username = username;
-    }
     public String getEmail() {
         return email;
     }
@@ -33,5 +23,12 @@ public class UserService {
     }
     public void setUsername(String username) {
         this.username = username;
+    }
+    public static UsuarioResponse fromEntity(Usuario user){
+        UsuarioResponse response= new UsuarioResponse();
+        response.setEmail(user.getEmail());
+        response.setPassword(user.getPassword());
+        response.setUsername(user.getUsername());
+        return response;
     }
 }
