@@ -1,5 +1,6 @@
 package org.acme.resource;
 
+import java.util.List;
 import java.util.Set;
 
 import org.acme.entity.Tasks;
@@ -23,12 +24,14 @@ import jakarta.ws.rs.core.Response;
 @Path("usuario/{usuarioId}/tasks")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class TaksResource {
+public class TasksResource {
+    public final List<String> status = List.of("pendente", "em progresso", "concluída");
+    public final List<String> prioridade = List.of("alta", "média", "baixa");
     TasksRepository repository;
     Validator validator;
     UserRepository userRepository;
     @Inject
-    public TaksResource(TasksRepository repository, Validator validator, UserRepository userRepository){
+    public TasksResource(TasksRepository repository, Validator validator, UserRepository userRepository){
         this.repository=repository;
         this.validator=validator;
         this.userRepository=userRepository;
@@ -41,6 +44,13 @@ public class TaksResource {
         if(!violations.isEmpty()){
             return Response.status(422).entity(violations).build();
         }
+        if(!this.status.contains(tasksService.getStatus())){
+            return Response.status(422).entity("Violação nos tipos de status existentes: pendente, em progresso, concluída ").build();
+        }
+        if(!this.prioridade.contains(tasksService.getStatus())){
+            return Response.status(422).entity("Violação nos tipos de status existentes: alta, média, baixa ").build();
+        }
+
         Usuario usuario = userRepository.findById(userId);
         Tasks tasks= new Tasks();
         tasks.setDescricao(tasksService.getDescricao());

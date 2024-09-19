@@ -25,7 +25,7 @@ public class Tasks {
     @Column(name="prioridade", nullable=false)
     private String prioridade;
     @ManyToOne
-    @JoinColumn(name="id usuario", referencedColumnName = "id")
+    @JoinColumn(name="id_usuario", referencedColumnName = "id")
     private Usuario id_usuario;
     public Long getId() {
         return id;
