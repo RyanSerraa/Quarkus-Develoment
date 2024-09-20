@@ -29,7 +29,6 @@ import jakarta.ws.rs.core.Response;
 public class UsuarioResource {
     private UserRepository repository;
     private Validator validator;
-    UserRepository userRepository;
 
     @Inject
         public UsuarioResource(UserRepository repository, Validator validator){
@@ -61,21 +60,21 @@ public class UsuarioResource {
     }
 
     @DELETE
-    @Path("{id}")
     @Transactional
-    public Response deleteUsers(@PathParam("id")long id){
-        Usuario user=userRepository.findById(id);
-        if(user!=null){
+    @Path("/{id}")
+    public Response deleteUser(@PathParam("id") long id) {
+        Usuario user = repository.findById(id);
+        if (user != null) {
             try {
-               repository.delete(user); 
-               return Response.status(Response.Status.NO_CONTENT).build();
+                repository.delete(user);
+                return Response.status(Response.Status.NO_CONTENT).build();
             } catch (Exception e) {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
             }
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
-
+    
 
     
 }
