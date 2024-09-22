@@ -52,7 +52,7 @@ public class TasksResource {
         if(!this.status.contains(tasksService.getStatus())){
             return Response.status(422).entity("Violação nos tipos de status existentes: pendente, em progresso, concluída ").build();
         }
-        if(!this.prioridade.contains(tasksService.getStatus())){
+        if(!this.prioridade.contains(tasksService.getPrioridade())){
             return Response.status(422).entity("Violação nos tipos de status existentes: alta, média, baixa ").build();
         }
 
@@ -68,16 +68,24 @@ public class TasksResource {
     }
     @GET
     public Response listTasks(@PathParam("usuarioId") long userId){
+        // Verifica se o usuário existe
         Usuario user = userRepository.findById(userId);
-        if (user==null){
+        if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
-    
-          }
-        PanacheQuery<Tasks> query= repository.findAll();
-        List<Tasks> tasks=query.list();
-        var tasksResponseList=tasks.stream().map(task -> TasksResponse.fromEntity(task)).toList();
+        }
+        
+        // Filtra as tarefas pelo usuário
+        PanacheQuery<Tasks> query = repository.find("id_usuario", user);
+        List<Tasks> tasks = query.list();
+        
+        // Converte a lista de Tasks para TasksResponse
+        var tasksResponseList = tasks.stream()
+                                     .map(TasksResponse::fromEntity)
+                                     .toList();
+        
         return Response.ok(tasksResponseList).build();
     }
+    
 
     @DELETE
     @Transactional

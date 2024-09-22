@@ -48,7 +48,7 @@ public class UsuarioResource {
         usuario.setUsername(userService.getUsername());
         usuario.setPassword(userService.getPassword());
         repository.persist(usuario);
-        return Response.ok(Response.Status.CREATED.getStatusCode()).entity(usuario).build();
+        return Response.status(Response.Status.CREATED).entity(usuario).build();
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
